@@ -1,4 +1,2 @@
 ﻿  Main.cpp
-c:\users\s199009\source\repos\linkedlists\linkedlists\main.cpp(10): error C2248: 'LinkedList<int>::LinkedList': cannot access private member declared in class 'LinkedList<int>'
-  c:\users\s199009\source\repos\linkedlists\linkedlists\tll.h(15): note: see declaration of 'LinkedList<int>::LinkedList'
-  c:\users\s199009\source\repos\linkedlists\linkedlists\main.cpp(10): note: see declaration of 'LinkedList<int>'
+c:\users\s199009\source\repos\linkedlists\linkedlists\main.cpp(46): error C3867: 'LinkedList<int>::tLL': non-standard syntax; use '&' to create a pointer to member

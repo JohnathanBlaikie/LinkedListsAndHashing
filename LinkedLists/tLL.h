@@ -1,22 +1,24 @@
 #pragma once
 
-template <typename temp>
+template <typename T>
 class LinkedList
 {
 	struct Node
 	{
-		temp data;
+		T data;
 
 		Node* next;
 		Node* previous;
 	};
 	Node* head;
 	Node* tail;
+public:
 	LinkedList()
 	{
 		head = NULL;
 		tail = NULL;
-	}		LinkedList(const LinkedList& other)
+	}	
+	LinkedList(const LinkedList& other)
 	{
 		head = NULL;
 		tail = NULL;
@@ -28,7 +30,7 @@ class LinkedList
 	~LinkedList() {
 		clear();
 	}
-public:
+
 	class iterator {
 		Node * current;
 
@@ -47,7 +49,7 @@ public:
 
 		bool operator ==(const iterator& r) const
 		{
-			if (current.data == r.current.data && current.next == r.current.next)
+			if (this->current == r.current)
 			{
 				return true;
 			}
@@ -56,22 +58,17 @@ public:
 
 		bool operator !=(const iterator& r) const
 		{
-			if (current.data != r.current.data && current.next != r.current.next)
-			{
-				return true;
-			}
-			return false;
+			return !(*this == r);
 		}
 
-		temp& operator*() const
+		T& operator*() const
 		{
-			current = current.next;
-			return*this;
+			return current->data;
 		}
 
 		iterator& operator++()
 		{
-			current = current.next;
+			current = current->next;
 			return*this;
 		}
 
@@ -83,36 +80,35 @@ public:
 
 	iterator start()
 	{
-		iterator t(head);
-		return t;
+		return iterator(head);
 	}
 
 	iterator end()
 	{
-		iterator t(head);
+		/*iterator t(head);
 		while (*t != NULL)
 		{
 			++t;
-		}
-		return t;
+		}*/
+		return iterator(nullptr);
 	}
 
 	void tLL()
 	{
 		Node * t = new Node;
-		t.data = NULL;
+		t->data = NULL;
 		head = t;
 	}
 
-	void pushF(const temp& val)
+	void pushF(const T& val)
 	{
 		Node * t = new Node;
-		t.data = val;
-		t.next = head;
-		t.previous = NULL;
+		t->data = val;
+		t->next = head;
+		t->previous = NULL;
 		if (head != NULL)
 		{
-			head.previous = t;
+			head->previous = t;
 		}
 		else
 		{
@@ -121,15 +117,15 @@ public:
 
 		head = t;
 	}
-	void pushL(const temp& val)
+	void pushL(const T& val)
 	{
 		Node * t = new Node;
-		t.data = val;
-		t.next = head;
-		t.previous = NULL;
+		t->data = val;
+		t->next = head;
+		t->previous = NULL;
 		if (head != NULL)
 		{
-			tail.next = t;
+			tail->next = t;
 		}
 		else
 		{
@@ -141,46 +137,48 @@ public:
 
 	void popF()
 	{
-		if (head.data != NULL)
+		if (head != NULL)
 		{
 			Node* t = head;
-			head = head.next;
+			head = head->next;
 			delete t;
 		}
 	}
 	void popL()
 	{
-		if (tail.data != NULL)
+		if (tail != NULL)
 		{
-			Node* t = head;
-			tail = tail.next;
+			Node* t = tail;
+			tail = tail->previous;
 			delete t;
-			tail.next = NULL;
+			if (tail != NULL) {
+				tail->next = NULL;
+			}
 		}
 	}
 
-	temp& front()
+	T& front()
 	{
-		return head.data;
+		return head->data;
 
 	}
 
-	temp& back()
+	T& back()
 	{
-		return tail.data;
+		return tail->data;
 	}
 
-	const temp& front() const
+	const T& front() const
 	{
-		return head.data;
+		return head->data;
 	}
 
-	const temp& back() const
+	const T& back() const
 	{
-		return tail.data;
+		return tail->data;
 	}
 
-	void clear(const temp& val)
+	void clear(const T& val)
 	{
 		size_t loops = 0;
 
@@ -227,7 +225,7 @@ public:
 
 	bool isEmpty() const
 	{
-		if (head.data == NULL && head.next == nullptr) {
+		if (head == nullptr) {
 			return true;
 		}
 		else {
@@ -237,7 +235,7 @@ public:
 
 	void clear()
 	{
-		for (int i = start(); i != end(); i++)
+		for (auto i = start(); i != end(); i++)
 		{
 			popL();
 		}
