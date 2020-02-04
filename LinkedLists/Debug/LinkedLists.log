@@ -1,2 +1,2 @@
 ﻿  Main.cpp
-c:\users\s199009\source\repos\linkedlists\linkedlists\main.cpp(46): error C3867: 'LinkedList<int>::tLL': non-standard syntax; use '&' to create a pointer to member
+  LinkedLists.vcxproj -> C:\Users\s199009\source\repos\LinkedLists\Debug\LinkedLists.exe

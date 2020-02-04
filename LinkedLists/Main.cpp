@@ -5,6 +5,12 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+//template<typename T) 
+//void print(LinkedList<T> list);
+
+template<typename T>
+void listVal(LinkedList<T> list);
+
 int main()
 {
 	LinkedList<int> linkList1;
@@ -37,15 +43,28 @@ int main()
 		cout << linkList1.front() << " confirmed.";
 	}
 
-	cout << "Generating random numbers...\n\n";
+	cout << "\n\nGenerating random numbers...\n\n";
 	for (int i = 0; i < 9; i++)
 	{
 		linkList1.pushL(rand() % 15);
 	}
-	
-	cout << linkList1.
 
+	listVal(linkList1);
+	cout << "Press any key to clear the list";
+	cin >> mumbo;
+	linkList1.clearList();
+	cout << "Test";
+	
 
 
 	return 0;
+}
+
+template<typename T>
+void listVal(LinkedList<T> l)
+{
+	for (auto i = l.start(); i != l.end(); ++i)
+	{
+		std::cout << (*i) << " ";
+	}
 }

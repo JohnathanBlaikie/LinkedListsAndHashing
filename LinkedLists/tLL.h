@@ -15,83 +15,34 @@ class LinkedList
 public:
 	LinkedList()
 	{
-		head = NULL;
-		tail = NULL;
-	}	
+		head = new Node();
+		tail = new Node();
+
+		head->next = tail;
+		tail->previous = head;
+	}
+
+	/*Node(int val, int _Prev, int _Next)
+	{
+		Node* t;
+		t->data = val;
+		t->previous = _Prev;
+		t->next = _Next;
+	}*/
+	
 	LinkedList(const LinkedList& other)
 	{
 		head = NULL;
 		tail = NULL;
-		for (int i = other.begin(); i != other.end(); ++i)
+		for (auto i = other.start(); i != other.end(); ++i)
 		{
 			pushL(*i);
 		}
 	}
 	~LinkedList() {
-		clear();
+		clearList();
 	}
 
-	class iterator {
-		Node * current;
-
-	public:
-
-
-		iterator()
-		{
-			current = nullptr;
-		}
-
-		iterator(Node * startNode)
-		{
-			current = startNode;
-		}
-
-		bool operator ==(const iterator& r) const
-		{
-			if (this->current == r.current)
-			{
-				return true;
-			}
-			return false;
-		}
-
-		bool operator !=(const iterator& r) const
-		{
-			return !(*this == r);
-		}
-
-		T& operator*() const
-		{
-			return current->data;
-		}
-
-		iterator& operator++()
-		{
-			current = current->next;
-			return*this;
-		}
-
-		iterator operator++(int)
-		{
-			return(*this);
-		}
-	};
-
-	iterator start()
-	{
-		return iterator(head);
-	}
-
-	iterator end()
-	{
-		/*iterator t(head);
-		while (*t != NULL)
-		{
-			++t;
-		}*/
-		return iterator(nullptr);
-	}
 
 	void tLL()
 	{
@@ -102,6 +53,11 @@ public:
 
 	void pushF(const T& val)
 	{
+		//Node *t = new Node(val, head, head->next);
+		//head->next = t;
+		//t->next->previous = t;
+
+
 		Node * t = new Node;
 		t->data = val;
 		t->next = head;
@@ -178,7 +134,22 @@ public:
 		return tail->data;
 	}
 
-	void clear(const T& val)
+
+	void clearList()
+	{
+		Node* node = head;
+
+		while (node != tail)
+		{
+			Node* tD = node;
+			node = node->next;
+			delete tD;
+		}
+		delete node;
+		head = NULL;
+		tail = NULL;
+	}
+	void removeList(const T& val)
 	{
 		size_t loops = 0;
 
@@ -190,7 +161,7 @@ public:
 			}
 		}
 
-		for (size_t i = 0; i < loops ;i++)
+		for (size_t i = 0; i < loops; i++)
 		{
 			Node* node = head;
 
@@ -223,6 +194,53 @@ public:
 		}
 	}
 
+	void remove(const T& val)
+	{
+		size_t loops = 0;
+		for (auto i = start(); i != end(); ++i)
+		{
+			if (*i == val)
+			{
+				loops++;
+			}
+		}
+		for (size_t i = 0; i < loops; i++)
+		{
+			Node * node = head;
+
+			while (node != NULL)
+			{
+				if (node->data == val)
+				{
+					if (node != head)
+					{
+						node->previous->next = node->next;
+					}
+					else
+					{
+						head = head->next;
+					}
+
+					if (node != tail)
+					{
+						node->next->previous = node->previous;
+
+					}
+					else
+					{
+						tail = tail->previous;
+					}
+
+					delete node;
+				}
+				else
+				{
+					node = node->next;
+				}
+			}
+		}
+	}
+
 	bool isEmpty() const
 	{
 		if (head == nullptr) {
@@ -233,21 +251,141 @@ public:
 		}
 	}
 
-	void clear()
+	size_t size() const
 	{
-		for (auto i = start(); i != end(); i++)
+		size_t t = 0;
+		for (auto i = start(); i != end(); ++i)
 		{
-			popL();
+			t++;
+		}
+
+		return t;
+	}
+
+
+	void resizeList(size_t nS)
+	{
+		size_t cS = size();
+
+		if (nS > cS)
+		{
+			for (size_t i = 0; i < (nS - cS); i++)
+			{
+				pushL(0);
+			}
+		}
+		else {
+			for (size_t i = 0; i < (nS - cS); i++)
+			{
+				popL();
+			}
 		}
 	}
 
-	void resize(size_t nS)
+	LinkedList& operator=(const LinkedList& r)
 	{
-		int size = 0;
-		for (int i = start(); i != end(); i++)
+		resizeList(r.size());
+
+		auto rL = r.start();
+		for (auto i = start(); i != end(); ++i)
 		{
-			pushL(1);
+			*i = *rL;
+			++rL;
 		}
+		return *this;
+
 	}
+
+	class iterator {
+		Node * current;
+
+	public:
+		
+
+		iterator()
+		{
+			current = nullptr;
+		}
+
+		iterator(Node * startNode)
+		{
+			current = startNode;
+		}
+
+		bool operator ==(const iterator& r) const
+		{
+			if (this->current == r.current)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		bool operator !=(const iterator& r) const
+		{
+			return !(*this == r);
+		}
+
+		T& operator*() const
+		{
+			return current->data;
+		}
+
+		iterator& operator++()
+		{
+			//if (current != NULL) {
+			//	current = current->next;
+			//	return*this;
+			//}
+			//else {
+			//	return nullptr;
+			//}
+			current = current->next;
+			return*this;
+		}
+
+		iterator operator++(int)
+		{
+			return(*this);
+		}
+		iterator& operator--()
+		{
+			current = current->previous;
+			return *this;
+		}
+		iterator operator--(int)
+		{
+			iterator temp = *this;
+			current = current->previous;
+			return temp;
+		}
+	};
+
+	iterator start()
+	{
+		return iterator(head);
+	}
+	const iterator start() const
+	{
+		return iterator(head);
+	}
+
+	iterator end()
+	{
+		/*iterator temp(tail);
+		++temp;
+		return temp;*/
+
+		return iterator(tail->previous);
+		//return iterator(nullptr);
+	}
+	const iterator end() const
+	{
+		iterator current(tail);
+		++current;
+		return current;
+	}
+
 
 };
+
