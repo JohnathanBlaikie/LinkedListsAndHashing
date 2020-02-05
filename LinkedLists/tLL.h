@@ -15,25 +15,13 @@ class LinkedList
 public:
 	LinkedList()
 	{
-		head = new Node();
-		tail = new Node();
-
-		head->next = tail;
-		tail->previous = head;
+		resetHeadTail();
+		
 	}
-
-	/*Node(int val, int _Prev, int _Next)
-	{
-		Node* t;
-		t->data = val;
-		t->previous = _Prev;
-		t->next = _Next;
-	}*/
 	
 	LinkedList(const LinkedList& other)
 	{
-		head = NULL;
-		tail = NULL;
+		resetHeadTail();
 		for (auto i = other.start(); i != other.end(); ++i)
 		{
 			pushL(*i);
@@ -43,6 +31,7 @@ public:
 		clearList();
 	}
 
+	
 
 	void tLL()
 	{
@@ -60,35 +49,37 @@ public:
 
 		Node * t = new Node;
 		t->data = val;
-		t->next = head;
-		t->previous = NULL;
-		if (head != NULL)
+		t->next = head->next;
+		t->next->previous = t;
+		t->previous = head;
+		head->next = t;
+		/*if (head != NULL)
 		{
 			head->previous = t;
 		}
 		else
 		{
 			tail = t;
-		}
+		}*/
 
-		head = t;
 	}
 	void pushL(const T& val)
 	{
 		Node * t = new Node;
 		t->data = val;
-		t->next = head;
-		t->previous = NULL;
-		if (head != NULL)
-		{
-			tail->next = t;
-		}
-		else
-		{
-			head = t;
-		}
+		t->next = tail;
+		tail->previous->next = t;
+		tail->previous = t;
+		//if (head != NULL)
+		//{
+		//	tail->next = t;
+		//}
+		//else
+		//{
+		//	head = t;
+		//}
 
-		tail = t;
+		//tail = t;
 	}
 
 	void popF()
@@ -115,13 +106,13 @@ public:
 
 	T& front()
 	{
-		return head->data;
+		return head->next->data;
 
 	}
 
 	T& back()
 	{
-		return tail->data;
+		return tail->previous->data;
 	}
 
 	const T& front() const
@@ -134,6 +125,12 @@ public:
 		return tail->data;
 	}
 
+	void resetHeadTail() {
+		head = new Node();
+		tail = new Node();
+		head->next = tail;
+		tail->previous = head;
+	}
 
 	void clearList()
 	{
@@ -146,8 +143,7 @@ public:
 			delete tD;
 		}
 		delete node;
-		head = NULL;
-		tail = NULL;
+		resetHeadTail();
 	}
 	void removeList(const T& val)
 	{
@@ -284,13 +280,14 @@ public:
 
 	LinkedList& operator=(const LinkedList& r)
 	{
-		resizeList(r.size());
-
+		//resizeList(r.size());
 		auto rL = r.start();
-		for (auto i = start(); i != end(); ++i)
+		clearList();
+		for (auto i = r.start(); i != r.end(); ++i)
 		{
-			*i = *rL;
-			++rL;
+			pushL(*i);
+			//*i = *rL;
+			//++rL;
 		}
 		return *this;
 
@@ -363,11 +360,11 @@ public:
 
 	iterator start()
 	{
-		return iterator(head);
+		return iterator(head->next);
 	}
 	const iterator start() const
 	{
-		return iterator(head);
+		return iterator(head->next);
 	}
 
 	iterator end()
@@ -381,9 +378,10 @@ public:
 	}
 	const iterator end() const
 	{
-		iterator current(tail);
+		return iterator(tail);
+		/*iterator current(tail);
 		++current;
-		return current;
+		return current;*/
 	}
 
 

@@ -1,0 +1,8 @@
+﻿  Main.cpp
+c:\users\s199009\source\repos\sorting\sorting\sorting.h(11): warning C4018: '<=': signed/unsigned mismatch
+  c:\users\s199009\source\repos\sorting\sorting\main.cpp(23): note: see reference to function template instantiation 'void bubS<int[5]>(T (&),int)' being compiled
+          with
+          [
+              T=int [5]
+          ]
+  Sorting.vcxproj -> C:\Users\s199009\source\repos\Sorting\Debug\Sorting.exe

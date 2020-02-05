@@ -11,6 +11,7 @@ using std::endl;
 template<typename T>
 void listVal(LinkedList<T> list);
 
+
 int main()
 {
 	LinkedList<int> linkList1;
@@ -48,12 +49,21 @@ int main()
 	{
 		linkList1.pushL(rand() % 15);
 	}
-
+		
 	listVal(linkList1);
-	cout << "Press any key to clear the list";
+	cout << "Press [C] to clear the list, or [S] to copy it to list 2.\n\n";
 	cin >> mumbo;
+	if(mumbo == 'c')
 	linkList1.clearList();
-	cout << "Test";
+
+	else {
+		linkList2 = linkList1;
+		cout << "List 1:\n";
+		listVal(linkList1);
+		cout << "\nList 2:\n";
+		listVal(linkList2);
+	}
+	cout << "\nTest";
 	
 
 
@@ -61,10 +71,14 @@ int main()
 }
 
 template<typename T>
-void listVal(LinkedList<T> l)
+void listVal(const LinkedList<T> l)
 {
+	cout << "List of values:\n";
+
 	for (auto i = l.start(); i != l.end(); ++i)
 	{
-		std::cout << (*i) << " ";
+		std::cout << (*i) << ", ";
 	}
 }
+
+
